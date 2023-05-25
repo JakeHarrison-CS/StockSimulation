@@ -7,39 +7,85 @@ public class simulator {
 	private String symbol; // Symbol of stock, etc APPL
 	private double seed; // the amount of fluctuation of the stock, 0-1 (the lower the less random)
 	private double trend; // Whether it will tend to trend up or down, -1 - 1 (below 0 is down above is up)
-	private double initial;
+	private double price;
+	private double trendPrice;
 	Random rand = new Random();
-	public simulator(String name, String symbol, double seed, double trend, double initial) 
+	public simulator(String name, String symbol, double seed, double trend, double price) 
 	{
 		this.name = name;
 		this.symbol = symbol;
 		this.seed = seed;
 		this.trend = trend;
-		this.initial = initial;
+		this.price = price;
 				
 	}
 	
-	public simulator(String name, String symbol, double initial) 
+	public simulator(String name, String symbol, double price) 
 	{
 		
 		this.name = name;
 		this.symbol = symbol;
-		this.initial = initial;
-		seed = rand.nextDouble(1);
+		this.price = price;
+		seed = 0;
 
 				
 	}
 
 	public void updateTrend()
 	{
-		trend = rand.nextDouble(-1, 1);
+		trend = rand.nextDouble(-0.99, 1);
+		trendPrice = price + (price*trend); // Sets the goal price till new trend is set
+		if (trendPrice < 0)
+		{
+			updateTrend(); // A stock can't be worth less than 0 so we regenerate till its greater than
+		}
 	}
 	
 	public void updateSeed() 
 	{
-		if (trend > 0) {
-			
+		if(trend < 0)
+		{
+			if(price <= trendPrice) 
+			{
+				updateTrend();
+				System.out.println("-----------------" + trendPrice + "-----------------");// When the trend price reaches the actual price we want to add to the price
+			}
 		}
+		else {
+			if(price >= trendPrice) 
+			{
+				updateTrend();
+				System.out.println("-----------------" + trendPrice + "-----------------");// When the trend price reaches the actual price we want to add to the price
+			}
+		}
+		
+		if (trend > 0) 
+		{ 
+			seed = bias(1, 65);
+			if((price + seed) < 0)
+			{
+				price = 0;
+			}
+			else 
+			{
+				price += seed;
+			}
+		}
+		if (trend < 0) 
+		{
+			seed = bias(-1, 65);
+			if((price + seed) < 0)
+			{
+				price = 0;
+
+			}
+			else 
+			{
+				price += seed;
+			}
+
+		}
+		
 	}
 	/**
 	 * @return the trend
@@ -87,35 +133,58 @@ public class simulator {
 		return seed;
 	}
 	
-	public double bias(int direction, double number, double bias)
+	/**
+	 * @return the price
+	 */
+	public double getPrice() {
+		return price;
+	}
+
+	/**
+	 * @param price the price to set
+	 */
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	private double bias(int direction, double bias)
 	{
-		if(direction > 0)
+		double number;
+		double biasFactor;
+		if(direction < 0)
 		{
-			double biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
-			if(biasFactor > bias) // If the number is less than 80 (20% chance) no bias
+			biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
+			if(biasFactor > bias) // If the number is less bias amount no bias
 			{
-				number += rand.nextDouble(-1, 1);
+				number = rand.nextDouble(-3, 3);
 			}else 
 			{
-				number += rand.nextDouble(-1,0.1); // Greater chance of going down
+				number = rand.nextDouble(-3,0.3); // Greater chance of going down
 			}
 		}	
 		else 
 		{
 	
 
-			double biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
-			if(biasFactor > bias) // If the number is less than 80 (20% chance) no bias
+			biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
+			if(biasFactor > bias) // If the number is less  bias amount no bias
 			{
-				number = rand.nextDouble(-1, 1);
+				number = rand.nextDouble(-3, 3);
+				
 			}
 			else 
 			{
-				number = rand.nextDouble(-0.1,1); // Greater chance of going up
+				number = rand.nextDouble(1,3); // Greater chance of going up
 			}
 		}
+
 		return number;
 		
+		
 	}
-	
+
+	public String toString()
+	{
+		return "Company Name: " + name + "\n" + "Ticker Symbol: " + symbol + "\n" + "Current Price: " + price + "\n" + "Trend Price: " + trendPrice;
+	}
 }
