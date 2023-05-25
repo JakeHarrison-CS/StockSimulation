@@ -27,7 +27,6 @@ public class simulator {
 		this.symbol = symbol;
 		this.price = price;
 		seed = 0;
-
 				
 	}
 
@@ -156,10 +155,10 @@ public class simulator {
 			biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
 			if(biasFactor > bias) // If the number is less bias amount no bias
 			{
-				number = rand.nextDouble(-3, 3);
+				number = rand.nextDouble(-1, 1);
 			}else 
 			{
-				number = rand.nextDouble(-3,0.3); // Greater chance of going down
+				number = rand.nextDouble(-1,0.3); // Greater chance of going down
 			}
 		}	
 		else 
@@ -169,12 +168,12 @@ public class simulator {
 			biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
 			if(biasFactor > bias) // If the number is less  bias amount no bias
 			{
-				number = rand.nextDouble(-3, 3);
+				number = rand.nextDouble(-1, 1);
 				
 			}
 			else 
 			{
-				number = rand.nextDouble(1,3); // Greater chance of going up
+				number = rand.nextDouble(-0.3,1); // Greater chance of going up
 			}
 		}
 
