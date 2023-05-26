@@ -8,7 +8,7 @@ public class Comp
 {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Hello World");
-		ChartDisplay appleGraph = new ChartDisplay("Apple Stock", "Time (Seconds)", "Price (USD)");
+		ChartDisplay appleGraph = new ChartDisplay("Apple Stock","Price (USD)");
 
 		ArrayList<Double> appleData = new ArrayList<Double>();
 		simulator apple = new simulator("Apple", "APPL", 100);
@@ -18,11 +18,12 @@ public class Comp
 		for(int i = 0;i<1000; i++) {
 			apple.updateSeed();
 			appleData.add(apple.getPrice());
-			//TimeUnit.MILLISECONDS.sleep(500);
+			//TimeUnit.MILLISECONDS.sleep(250);
+			appleGraph.updateData(appleData);
 
 
 		}
-		appleGraph.updateData(appleData);
+
 		System.out.println(apple);
 	}
 }

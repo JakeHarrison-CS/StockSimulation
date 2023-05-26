@@ -2,6 +2,8 @@ package com.StockSimulation.Simulator;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisLocation;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -11,7 +13,6 @@ import java.util.List;
 
 public class ChartDisplay {
     private static String CHART_TITLE;
-    private static String X_AXIS_LABEL;
     private static String Y_AXIS_LABEL;
 
     private XYSeries series;
@@ -19,14 +20,20 @@ public class ChartDisplay {
     private JFreeChart chart;
     private ChartPanel chartPanel;
 
-    public ChartDisplay (String CHART_TITLE, String X_AXIS_LABEL, String Y_AXIS_LABEL) {
+    public ChartDisplay (String CHART_TITLE, String Y_AXIS_LABEL) {
         this.CHART_TITLE = CHART_TITLE;
-        this.X_AXIS_LABEL = X_AXIS_LABEL;
         this.Y_AXIS_LABEL = Y_AXIS_LABEL;
         series = new XYSeries("Stock Price");
         dataset = new XYSeriesCollection(series);
-        chart = ChartFactory.createXYLineChart(CHART_TITLE, X_AXIS_LABEL, Y_AXIS_LABEL, dataset);
+        chart = ChartFactory.createXYLineChart(CHART_TITLE, null, Y_AXIS_LABEL, dataset); // Remove X_AXIS_LABEL argument
         chart.getLegend().setVisible(false);
+        XYPlot plot = (XYPlot) chart.getPlot();
+        ValueAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setLabel("");
+        domainAxis.setTickLabelsVisible(false);
+        plot.setDomainAxis(domainAxis);
+        plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
+
         chartPanel = new ChartPanel(chart);
 
         JFrame frame = new JFrame("Real-time Chart");

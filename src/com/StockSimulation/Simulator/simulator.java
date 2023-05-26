@@ -19,14 +19,14 @@ public class simulator {
 	 * @param trend The initial trend of the stock
 	 * @param price The initial price of the stock
 	 */
-	public simulator(String name, String symbol, double seed, double trend, double price) 
+	public simulator(String name, String symbol, double seed, double trend, double price)
 	{
 		this.name = name;
 		this.symbol = symbol;
 		this.seed = seed;
 		this.trend = trend;
 		this.price = price;
-				
+
 	}
 
 	/**
@@ -35,14 +35,14 @@ public class simulator {
 	 * @param symbol The symbol of the stock
 	 * @param price The initial price of the stock
 	 */
-	public simulator(String name, String symbol, double price) 
+	public simulator(String name, String symbol, double price)
 	{
-		
+
 		this.name = name;
 		this.symbol = symbol;
 		this.price = price;
 		seed = 0;
-				
+
 	}
 
 	/**
@@ -62,39 +62,30 @@ public class simulator {
 	 * This method updates the seed/price of the stock. It generates a random number with bias towards the direction of the stock then adds it to the price.
 	 */
 	public void updateSeed() {
-		// if the trend is greater than zero (trending upwards) it will have bias to picking a above zero random number
-		if(trend > 0)
-		{
-			seed = bias(1,60);
-		}
-		else
-		// if the trend is less than zero (trending downwards) it will have bias to picking a below zero random number
-		{
-			seed = bias(-1,60);
-		}
-		// if the new price is below zero we want to set the stock price to just be zero
+		seed = rand.nextDouble(-1, 1); // Generate a random number between -1 and 1
+
 		if ((price + seed) < 0) {
 			price = 0;
+		} else {
+			price += seed;
 		}
-		else
-		{
-			price+=seed;
-		}
-		// These are our two cases where we need to generate a new trend
-		// If the stock is trending downwards, we check to see if the price has met that trend position if so we generate a new trend
+
+		// Check if the stock is trending downwards
 		if (trend < 0) {
+			// Check if the price has reached the trend position
 			if (price <= trendPrice) {
-				updateTrend();
+				updateTrend(); // Generate a new trend
 				System.out.println("-----------------" + trendPrice + "-----------------");
 			}
 		} else {
-			// If the stock is trending upwards, we check to see if the price has met that trend position, if so we generate a new trend
+			// Check if the stock is trending upwards
 			if (price >= trendPrice) {
-				updateTrend();
+				updateTrend(); // Generate a new trend
 				System.out.println("-----------------" + trendPrice + "-----------------");
 			}
 		}
 	}
+
 
 	/**
 	 * @return the trend
@@ -137,11 +128,11 @@ public class simulator {
 	public void setName(String name) {
 		this.name = name;
 	}
-		
+
 	public double getSeed() {
 		return seed;
 	}
-	
+
 	/**
 	 * @return the price
 	 */
@@ -172,27 +163,27 @@ public class simulator {
 			if(biasFactor > bias) // If the number is less bias amount no bias
 			{
 				number = rand.nextDouble(-1, 1);
-			}else 
+			}else
 			{
 				number = rand.nextDouble(-1,0.3); // Greater chance of going down
 			}
-		}	
-		else 
+		}
+		else
 		{
 			biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
 			if(biasFactor > bias) // If the number is less  bias amount no bias
 			{
 				number = rand.nextDouble(-1, 1);
 			}
-			else 
+			else
 			{
 				number = rand.nextDouble(-0.3,1); // Greater chance of going up
 			}
 		}
 
 		return number;
-		
-		
+
+
 	}
 
 	/**
