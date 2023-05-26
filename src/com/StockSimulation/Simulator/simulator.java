@@ -10,6 +10,15 @@ public class simulator {
 	private double price;
 	private double trendPrice;
 	Random rand = new Random();
+
+	/**
+	 * A more expanded version to create a stock (used for debugging/testing)
+	 * @param name The name of the Stock
+	 * @param symbol The symbol of the stock
+	 * @param seed The initial seed of the stock
+	 * @param trend The initial trend of the stock
+	 * @param price The initial price of the stock
+	 */
 	public simulator(String name, String symbol, double seed, double trend, double price) 
 	{
 		this.name = name;
@@ -19,7 +28,13 @@ public class simulator {
 		this.price = price;
 				
 	}
-	
+
+	/**
+	 * Creates the stock to simulate (use by default)
+	 * @param name The name of the stock
+	 * @param symbol The symbol of the stock
+	 * @param price The initial price of the stock
+	 */
 	public simulator(String name, String symbol, double price) 
 	{
 		
@@ -30,62 +45,57 @@ public class simulator {
 				
 	}
 
+	/**
+	 * This method generates a new trend when called
+	 */
 	public void updateTrend()
 	{
-		trend = rand.nextDouble(-0.99, 1);
+		trend = rand.nextGaussian(0,1); // generates a random guassian (meaning more stable and predictable movement vs a random double)
 		trendPrice = price + (price*trend); // Sets the goal price till new trend is set
 		if (trendPrice < 0)
 		{
-			updateTrend(); // A stock can't be worth less than 0 so we regenerate till its greater than
+			updateTrend(); // A stock can't be worth less than 0, so we regenerate till its greater than
 		}
 	}
-	
-	public void updateSeed() 
-	{
-		if(trend < 0)
-		{
-			if(price <= trendPrice) 
-			{
-				updateTrend();
-				System.out.println("-----------------" + trendPrice + "-----------------");// When the trend price reaches the actual price we want to add to the price
-			}
-		}
-		else {
-			if(price >= trendPrice) 
-			{
-				updateTrend();
-				System.out.println("-----------------" + trendPrice + "-----------------");// When the trend price reaches the actual price we want to add to the price
-			}
-		}
-		
-		if (trend > 0) 
-		{ 
-			seed = bias(1, 65);
-			if((price + seed) < 0)
-			{
-				price = 0;
-			}
-			else 
-			{
-				price += seed;
-			}
-		}
-		if (trend < 0) 
-		{
-			seed = bias(-1, 65);
-			if((price + seed) < 0)
-			{
-				price = 0;
 
-			}
-			else 
-			{
-				price += seed;
-			}
-
+	/**
+	 * This method updates the seed/price of the stock. It generates a random number with bias towards the direction of the stock then adds it to the price.
+	 */
+	public void updateSeed() {
+		// if the trend is greater than zero (trending upwards) it will have bias to picking a above zero random number
+		if(trend > 0)
+		{
+			seed = bias(1,60);
 		}
-		
+		else
+		// if the trend is less than zero (trending downwards) it will have bias to picking a below zero random number
+		{
+			seed = bias(-1,60);
+		}
+		// if the new price is below zero we want to set the stock price to just be zero
+		if ((price + seed) < 0) {
+			price = 0;
+		}
+		else
+		{
+			price+=seed;
+		}
+		// These are our two cases where we need to generate a new trend
+		// If the stock is trending downwards, we check to see if the price has met that trend position if so we generate a new trend
+		if (trend < 0) {
+			if (price <= trendPrice) {
+				updateTrend();
+				System.out.println("-----------------" + trendPrice + "-----------------");
+			}
+		} else {
+			// If the stock is trending upwards, we check to see if the price has met that trend position, if so we generate a new trend
+			if (price >= trendPrice) {
+				updateTrend();
+				System.out.println("-----------------" + trendPrice + "-----------------");
+			}
+		}
 	}
+
 	/**
 	 * @return the trend
 	 */
@@ -146,6 +156,12 @@ public class simulator {
 		this.price = price;
 	}
 
+	/**
+	 * This method generates a bias number either upwards or downwards. The direction determines if it has upwards or downwards bias.
+	 * @param direction If the direction is above 0 it will have upward bias, if direction is below zero it will have downward bias
+	 * @param bias The percentage of chance for bias
+	 * @return returns the number generated
+	 */
 	private double bias(int direction, double bias)
 	{
 		double number;
@@ -163,13 +179,10 @@ public class simulator {
 		}	
 		else 
 		{
-	
-
 			biasFactor = rand.nextInt(0, 100); // choose a random number between 0-100 to calculate the bias
 			if(biasFactor > bias) // If the number is less  bias amount no bias
 			{
 				number = rand.nextDouble(-1, 1);
-				
 			}
 			else 
 			{
@@ -182,6 +195,10 @@ public class simulator {
 		
 	}
 
+	/**
+	 * Provides all the info in one method
+	 * @return All the information including: name, symbol, price, trend
+	 */
 	public String toString()
 	{
 		return "Company Name: " + name + "\n" + "Ticker Symbol: " + symbol + "\n" + "Current Price: " + price + "\n" + "Trend Price: " + trendPrice;

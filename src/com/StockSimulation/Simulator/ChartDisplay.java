@@ -10,17 +10,20 @@ import javax.swing.JFrame;
 import java.util.List;
 
 public class ChartDisplay {
-    private static final String CHART_TITLE = "Real-time Chart";
-    private static final String X_AXIS_LABEL = "X-axis";
-    private static final String Y_AXIS_LABEL = "Y-axis";
+    private static String CHART_TITLE;
+    private static String X_AXIS_LABEL;
+    private static String Y_AXIS_LABEL;
 
     private XYSeries series;
     private XYSeriesCollection dataset;
     private JFreeChart chart;
     private ChartPanel chartPanel;
 
-    public ChartDisplay (List<Double> data) {
-        series = new XYSeries("Real-time Data");
+    public ChartDisplay (String CHART_TITLE, String X_AXIS_LABEL, String Y_AXIS_LABEL) {
+        this.CHART_TITLE = CHART_TITLE;
+        this.X_AXIS_LABEL = X_AXIS_LABEL;
+        this.Y_AXIS_LABEL = Y_AXIS_LABEL;
+        series = new XYSeries("Stock Price");
         dataset = new XYSeriesCollection(series);
         chart = ChartFactory.createXYLineChart(CHART_TITLE, X_AXIS_LABEL, Y_AXIS_LABEL, dataset);
         chart.getLegend().setVisible(false);
@@ -31,8 +34,6 @@ public class ChartDisplay {
         frame.add(chartPanel);
         frame.pack();
         frame.setVisible(true);
-
-        updateData(data);
     }
 
     public void updateData(List<Double> data) {
