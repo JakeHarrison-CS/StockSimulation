@@ -45,13 +45,17 @@ public class Stock {
      * @param file (String) the name of the stock data file
      * @param tickerSymbol (String) the ticker symbol of the stock
      */
-    public Stock(String file, String tickerSymbol) throws IOException {
+    public Stock(String file, String tickerSymbol) {
         this.file = file;
         this.tickerSymbol = tickerSymbol;
         this.movingAverageTerm = 20;
         readingData("price", stockPrice);
         Collections.reverse(stockPrice);
-
+        for(int i =0; i < movingAverageTerm; i++)
+        {
+            movingAverage.add(-1.0);
+        }
+        readingData("moving average", movingAverage);
     }
 
     /**
@@ -79,6 +83,7 @@ public class Stock {
     public void setMovingAverageTerm(int movingAverageTerm)
     {
         this.movingAverageTerm = movingAverageTerm;
+        movingAverage.clear();
         for(int i =0; i < movingAverageTerm; i++)
         {
             movingAverage.add(-1.0);
@@ -136,7 +141,6 @@ public class Stock {
 
         } else if (choice.equalsIgnoreCase("moving average")) {
             double movingAverageCalc;
-            System.out.println(stockPrice.size());
             for (int i = 0; i < stockPrice.size(); i++) {
                 if (i >= (movingAverageTerm-1)) {
                     movingAverageCalc = 0;
