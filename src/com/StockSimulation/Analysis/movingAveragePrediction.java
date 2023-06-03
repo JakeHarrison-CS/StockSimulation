@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class movingAveragePrediction{
     private int shares = 0;
-    private double money;
+    public double money;
     private ArrayList<Double> stockPrice = new ArrayList<Double>();
     private ArrayList<Double> movingAverage = new ArrayList<Double>();
     public movingAveragePrediction(Stock stock, double money){
@@ -44,7 +44,29 @@ public class movingAveragePrediction{
         return money-startMoney;
     }
 
-
+//    public double run500(Stock stock)
+//    {
+//        int highestMATerm = -1;
+//        int lowestMATerm = -1;
+//        double highestMA = movingAverageRun();
+//        double lowestMA = movingAverageRun();
+//        for(int i =1; i <= 500; i++){
+//            stock.setMovingAverageTerm(i);
+//            System.out.println("Profit ("+i+"): " + movingAverageRun());
+//            if(movingAverageRun() >highestMA)
+//            {
+//                highestMA = movingAverageRun();
+//                highestMATerm = i;
+//            }
+//            if(movingAverageRun() <lowestMA)
+//            {
+//                lowestMA = movingAverageRun();
+//                lowestMATerm = i;
+//            }
+//        }
+//        return
+//
+//    }
 
 
 }

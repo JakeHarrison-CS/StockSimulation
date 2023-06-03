@@ -8,15 +8,15 @@ import com.StockSimulation.Analysis.movingAveragePrediction;
 public class Comp
 {
 	public static void main(String[] args) throws IOException, InterruptedException {
-        Stock apple = new Stock("Apple", "AAPL",2);
-        List applePrice = apple.getPrice();
-        List appleMovingAverage = apple.getMovingAverage();
-        apple.makeGraph();
-        System.out.println(Arrays.toString(applePrice.toArray()));
-        System.out.println(Arrays.toString(appleMovingAverage.toArray()));
+        Stock apple = new Stock("Google", "AAPL",50);
+//        List applePrice = apple.getPrice();
+//        List appleMovingAverage = apple.getMovingAverage();
+       apple.makeGraph();
+//        System.out.println(Arrays.toString(applePrice.toArray()));
+//        System.out.println(Arrays.toString(appleMovingAverage.toArray()));
         movingAveragePrediction appleMA = new movingAveragePrediction(apple, 1000 );
-        int highestMATerm = 0;
-        int lowestMATerm = 0;
+        int highestMATerm = -1;
+        int lowestMATerm = -1;
         double highestMA = appleMA.movingAverageRun();
         double lowestMA = appleMA.movingAverageRun();
         for(int i =1; i <= 500; i++){
