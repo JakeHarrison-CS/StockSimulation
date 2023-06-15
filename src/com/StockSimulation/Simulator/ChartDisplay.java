@@ -24,7 +24,7 @@ public class ChartDisplay {
     private XYSeries series2; // New series for the second line
     private XYSeriesCollection dataset;
     private JFreeChart chart;
-    private ChartPanel chartPanel;
+    public ChartPanel chartPanel;
 
 
     public ChartDisplay(String CHART_TITLE, String Y_AXIS_LABEL, boolean enableSecondLine) {

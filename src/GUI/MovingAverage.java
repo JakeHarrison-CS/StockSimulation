@@ -16,6 +16,7 @@ public class MovingAverage extends javax.swing.JFrame {
      */
     public MovingAverage() {
         initComponents();
+        moneyError.setVisible(false);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,10 +27,13 @@ public class MovingAverage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jButton2 = new javax.swing.JButton();
         choice = new javax.swing.JComboBox<>();
+        startMoney = new javax.swing.JTextField();
+        moneyError = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Moving Average Calculation");
         setBackground(new java.awt.Color(39, 44, 60));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -51,49 +55,101 @@ public class MovingAverage extends javax.swing.JFrame {
             }
         });
 
+        startMoney.setText("Start Money ($)");
+        startMoney.setToolTipText("Start Money ($)");
+        startMoney.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startMoneyActionPerformed(evt);
+            }
+        });
+
+        moneyError.setForeground(new java.awt.Color(255, 51, 51));
+        moneyError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        moneyError.setText("Money Amount Has To Be a Number");
+        moneyError.setToolTipText("");
+        moneyError.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                moneyErrorComponentHidden(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(182, 182, 182)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(moneyError, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(182, 182, 182)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(choice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(startMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(182, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(choice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(choice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(choice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(startMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(271, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(moneyError)
+                .addContainerGap(248, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        MovingAverageDisplay results = new MovingAverageDisplay();
-        results.setVisible(true);        
+        boolean runOnly = false;
+        try {
+            double money = getMoney();
+            runOnly = true;
+        } catch (RuntimeException e) {
+            moneyError.setVisible(true);
+            runOnly = false;
+        }
+        if(runOnly){
+            MovingAverageDisplay results = new MovingAverageDisplay();
+            results.setVisible(true);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
-    
-    
+
     public static String getChoice(){
         String stockChoice = (String)choice.getSelectedItem();
         return stockChoice;
+    }
+    public static double getMoney(){
+        try {
+            String money = startMoney.getText();
+            return Double.parseDouble(money);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid Money Format");
+        }
     }
     private void choiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choiceActionPerformed
         // TODO add your handling code here:
         System.out.println(choice);
     }//GEN-LAST:event_choiceActionPerformed
+
+    private void startMoneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startMoneyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startMoneyActionPerformed
+
+    private void moneyErrorComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_moneyErrorComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_moneyErrorComponentHidden
 
     /**
      * @param args the command line arguments
@@ -102,7 +158,7 @@ public class MovingAverage extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -128,7 +184,6 @@ public class MovingAverage extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -140,5 +195,9 @@ public class MovingAverage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static javax.swing.JComboBox<String> choice;
     private javax.swing.JButton jButton2;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private static javax.swing.JLabel moneyError;
+    private static javax.swing.JTextField startMoney;
     // End of variables declaration//GEN-END:variables
+
 }

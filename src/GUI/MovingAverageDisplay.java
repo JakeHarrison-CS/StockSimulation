@@ -7,6 +7,8 @@ package GUI;
 import javax.swing.table.DefaultTableModel;
 
 import static GUI.MovingAverage.getChoice;
+import static GUI.MovingAverage.getMoney;
+
 import com.StockSimulation.Simulator.Stock;
 import com.StockSimulation.Analysis.movingAveragePrediction;
 
@@ -23,26 +25,30 @@ public class MovingAverageDisplay extends javax.swing.JFrame {
     public MovingAverageDisplay() {
         initComponents();
         Stock stock = new Stock(getChoice(), "null", 20);
-        movingAveragePrediction prediction = new movingAveragePrediction(stock, 1000);
+        movingAveragePrediction prediction = new movingAveragePrediction(stock, 2000);
         model = (DefaultTableModel) jTable1.getModel();
         int highestMATerm = -1;
         int lowestMATerm = -1;
-        double highestMA = prediction.movingAverageRun();
-        double lowestMA = prediction.movingAverageRun();
+        double highestMA = -1000;
+        double lowestMA = 1000;
+        prediction.startMoney = getMoney();
         for(int i=1; i<=500;i++)
         {
-            if(prediction.movingAverageRun() > highestMA)
+            double result = prediction.movingAverageRun();
+            prediction.money = prediction.startMoney;
+            if(result > highestMA)
             {
-                highestMA = prediction.movingAverageRun();
+                highestMA = result;
                 highestMATerm = i;
             }
-            if(prediction.movingAverageRun() < lowestMA)
+            if(result < lowestMA)
             {
-                lowestMA = prediction.movingAverageRun();
+                lowestMA = result;
                 lowestMATerm = i;
-                
+
             }
-            model.addRow(new Object[]{i, Stock.round(prediction.movingAverageRun() + prediction.money,2), Stock.round(prediction.movingAverageRun(), 2)});
+
+            model.addRow(new Object[]{i, "$"+Stock.round(result+prediction.startMoney,2), "$"+Stock.round(result, 2)});
             stock.setMovingAverageTerm(i);
         }
         jLabel1.setText("Highest Profit: $" + Stock.round(highestMA, 2));
@@ -70,15 +76,17 @@ public class MovingAverageDisplay extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(java.awt.Color.pink);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(java.awt.Color.white);
 
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Moving Average Term", "Money", "Profit/Loss"
+                "Moving Average Term", "New Money", "Profit/Loss"
             }
         ) {
             Class[] types = new Class [] {

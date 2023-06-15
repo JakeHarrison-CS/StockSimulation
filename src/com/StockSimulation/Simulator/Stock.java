@@ -96,7 +96,7 @@ public class Stock {
      * Makes the graph
      */
     public void makeGraph() {
-        ChartDisplay stock = new ChartDisplay((file + "(" + tickerSymbol+ ") " + "Stock Price"), "Price (USD)", true);
+        ChartDisplay stock = new ChartDisplay((file + " Stock Price"), "Price (USD)", true);
         stock.updateData(stockPrice, movingAverage, true);
 
 

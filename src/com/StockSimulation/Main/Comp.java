@@ -8,35 +8,36 @@ import com.StockSimulation.Analysis.movingAveragePrediction;
 public class Comp
 {
 	public static void main(String[] args) throws IOException, InterruptedException {
-        Stock apple = new Stock("Google", "AAPL",50);
+        Stock amazon = new Stock("Amazon", "AMZN",20);
 //        List applePrice = apple.getPrice();
 //        List appleMovingAverage = apple.getMovingAverage();
-       apple.makeGraph();
+       amazon.makeGraph();
 //        System.out.println(Arrays.toString(applePrice.toArray()));
 //        System.out.println(Arrays.toString(appleMovingAverage.toArray()));
-        movingAveragePrediction appleMA = new movingAveragePrediction(apple, 1000 );
-        int highestMATerm = -1;
-        int lowestMATerm = -1;
-        double highestMA = appleMA.movingAverageRun();
-        double lowestMA = appleMA.movingAverageRun();
-        for(int i =1; i <= 500; i++){
-                apple.setMovingAverageTerm(i);
-                System.out.println("Profit ("+i+"): " + appleMA.movingAverageRun());
-                if(appleMA.movingAverageRun() >highestMA)
-                {
-                        highestMA = appleMA.movingAverageRun();
-                        highestMATerm = i;
-                }
-                if(appleMA.movingAverageRun() <lowestMA)
-                {
-                            lowestMA = appleMA.movingAverageRun();
-                            lowestMATerm = i;
-                }
-        }
-        System.out.println("Highest Profit: " + highestMA);
-        System.out.println("Highest Term: " + highestMATerm);
-        System.out.println("Lowest Profit: " + lowestMA);
-        System.out.println("Lowest Term: " + lowestMATerm);
+//        movingAveragePrediction amazonMA = new movingAveragePrediction(amazon, 2000);
+//        amazonMA.movingAverageRun();
+//        int highestMATerm = -1;
+//        int lowestMATerm = -1;
+//        double highestMA = appleMA.movingAverageRun();
+//        double lowestMA = appleMA.movingAverageRun();
+//        for(int i =1; i <= 500; i++){
+//                apple.setMovingAverageTerm(i);
+//                System.out.println("Profit ("+i+"): " + appleMA.movingAverageRun());
+//                if(appleMA.movingAverageRun() >highestMA)
+//                {
+//                        highestMA = appleMA.movingAverageRun();
+//                        highestMATerm = i;
+//                }
+//                if(appleMA.movingAverageRun() <lowestMA)
+//                {
+//                            lowestMA = appleMA.movingAverageRun();
+//                            lowestMATerm = i;
+//                }
+//        }
+//        System.out.println("Highest Profit: " + highestMA);
+//        System.out.println("Highest Term: " + highestMATerm);
+//        System.out.println("Lowest Profit: " + lowestMA);
+//        System.out.println("Lowest Term: " + lowestMATerm);
 
 
 

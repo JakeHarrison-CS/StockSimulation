@@ -1,7 +1,6 @@
 GUI/MovingAverage$3.class
 GUI/MovingAverageDisplay.class
 com/StockSimulation/Simulator/ChartDisplay.class
-GUI/Main.class
 OldCode/simulator.class
 GUI/MovingAverageDisplay$2.class
 com/StockSimulation/Simulator/Stock.class
