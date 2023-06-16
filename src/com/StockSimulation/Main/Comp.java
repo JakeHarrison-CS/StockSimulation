@@ -1,5 +1,6 @@
 package com.StockSimulation.Main;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,11 +10,13 @@ public class Comp
 {
 	public static void main(String[] args) throws IOException, InterruptedException {
         Stock amazon = new Stock("Amazon", "AMZN",20);
+        ArrayList<Double> ma = amazon.getMovingAverage();
+
 //        List applePrice = apple.getPrice();
 //        List appleMovingAverage = apple.getMovingAverage();
        amazon.makeGraph();
 //        System.out.println(Arrays.toString(applePrice.toArray()));
-//        System.out.println(Arrays.toString(appleMovingAverage.toArray()));
+        System.out.println(Arrays.toString(ma.toArray()));
 //        movingAveragePrediction amazonMA = new movingAveragePrediction(amazon, 2000);
 //        amazonMA.movingAverageRun();
 //        int highestMATerm = -1;

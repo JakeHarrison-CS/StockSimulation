@@ -63,7 +63,7 @@ public class ChartDisplay {
         chartPanel = new ChartPanel(chart);
 
         JFrame frame = new JFrame( "Stock Chart");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(chartPanel);
         frame.pack();
         frame.setVisible(true);
