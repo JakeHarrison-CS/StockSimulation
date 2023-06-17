@@ -2,6 +2,7 @@
 
 The StockBacktester is a Java-based project designed to provide users with a simulated environment to practice buying and selling stocks while also offering the functionality to analyze stock performance using moving averages. The project was built over the span of 4 weeks as a final project for my Computer Science class.
 To use: run the mainMenu.java located in src/GUI/mainMenu.java
+
 Key Features:
 
     1. Stock Market Simulation: The project allows users to buy and sell stock, enabling them to simulate buying and selling stocks without actually investing real money. Users can monitor the performance of their portfolio, view current stock prices, and see a live graph.
