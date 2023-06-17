@@ -15,47 +15,50 @@ public class movingAveragePrediction{
 
         this.movingAverage = stock.getMovingAverage();
     }
+    /**
+     * Runs the moving average prediction
+     * @return (double) the profit
+     */
     public double movingAverageRun() {
-        boolean bought = false;
-        for (int i = 0; i < stockPrice.size(); i++) {
+        boolean bought = false; // If the bot has recently bought the stock
+        for (int i = 0; i < stockPrice.size(); i++) { // Loop through the stock price
+            // Checks if the stock price is greater than the moving average and if the bot has not bought the stock yet
             if (stockPrice.get(i) > movingAverage.get(i) && movingAverage.get(i) != -1 && bought == false && money >= stockPrice.get(i)) {
+                // If so, buy the stock until the bot runs out of money
                 while ((money - stockPrice.get(i)) > 0) {
                     money = money - stockPrice.get(i);
                     shares += 1;
                 }
-                System.out.println("BOUGHT :" + money + " SHARES: " + shares + " STOCK PRICE: " + stockPrice.get(i));
                 bought = true;
-                //System.out.println("BOUGHT STOCK! " + "NEW MONEY: " + money + " STOCK PRICE: " + stockPrice.get(i) + " MOVING AVERAGE: " + movingAverage.get(i));
-
             }
+            // Checks if the stock price is less than the moving average and if the bot has bought the stock
             if (stockPrice.get(i) < movingAverage.get(i) && movingAverage.get(i) != -1 && bought == true && money + stockPrice.get(i) > 0) {
+                // If so, sell the stock until the bot runs out of shares
                 for (int j = shares; j > 0; j--) {
                     money += stockPrice.get(i);
                     shares = j;
                 }
-                System.out.println("SOLD :" + money + " SHARES: " + shares + " STOCK PRICE: " + stockPrice.get(i));
+                // Set bought to false and shares to 0 to indicate that the bot has sold all of its shares
                 shares = 0;
                 bought = false;
-
-
-                //System.out.println("SOLD STOCK! " + "NEW MONEY: " + money + " STOCK PRICE: " + stockPrice.get(i) + " MOVING AVERAGE: " + movingAverage.get(i));
-                //  System.out.println(" Money: " + money + " StartMoney: "+ startMoney + " Money - Startmoney:  " + (money-startMoney));
             }
+            // Checks if the bot has shares left and if the stock price is the last stock price
             if (shares > 0 && i == stockPrice.size() - 1)
             {
-                    for (int j = 0; j < shares; j++)
-                    {
-                        money += stockPrice.get(i);
-                    }
-                System.out.println("SOLD FINAL :" + money + " SHARES: " + shares + " STOCK PRICE: " + stockPrice.get(i));
+                // Sell all of the shares
+                for (int j = 0; j < shares; j++)
+                {
+                    money += stockPrice.get(i);
+                }
                 shares = 0;
-                    bought = false;
+                bought = false;
 
 
             }
 
         }
 
+        // Return the profit
             return money - startMoney;
     }
 

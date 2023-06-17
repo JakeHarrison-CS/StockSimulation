@@ -105,7 +105,7 @@ public class Stock {
     /**
      * This method either reads, one of the CSV files and grabs the closing price, or calcualtes the moving average
      * @param choice (String), if the string is "price" it will calculate the price, if it is "moving average" it will calculate the moving avaerage
-     * @param choiceList (ArrayList) The list it should add the info to
+     * @param choiceList (ArrayList) The list it should add the info to (either stockPrice or movingAverage)
      */
     private void readingData(String choice, ArrayList choiceList) {
         String csvFile = "StockData/" +file + ".csv";
@@ -157,6 +157,12 @@ public class Stock {
         }
 
     }
+    /**
+     * Rounds a double to a certain number of decimal places
+     * @param value the double to round
+     * @param places the number of decimal places to round to
+     * @return the rounded double
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

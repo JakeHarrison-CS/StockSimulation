@@ -26,7 +26,12 @@ public class ChartDisplay {
     private JFreeChart chart;
     public ChartPanel chartPanel;
 
-
+    /**
+     * Creates a new chart display object
+     * @param CHART_TITLE (String) the title of the chart
+     * @param Y_AXIS_LABEL (String) the label for the y-axis
+     * @param enableSecondLine (boolean) whether or not to enable the second line
+     */
     public ChartDisplay(String CHART_TITLE, String Y_AXIS_LABEL, boolean enableSecondLine) {
         this.CHART_TITLE = CHART_TITLE;
         this.Y_AXIS_LABEL = Y_AXIS_LABEL;
@@ -70,6 +75,12 @@ public class ChartDisplay {
     }
 
 
+    /**
+     * Updates the data in the chart
+     * @param data1 (List<Double>) the data for the first line
+     * @param data2 (List<Double>) the data for the second line
+     * @param addBulletPoints (boolean) whether or not to add bullet points to the second line
+     */
     public void updateData(List<Double> data1, List<Double> data2, boolean addBulletPoints) {
         series1.clear();
         if (series2 != null) {

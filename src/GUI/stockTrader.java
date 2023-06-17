@@ -6,29 +6,33 @@ package GUI;
 import com.StockSimulation.Simulator.*;
 import javax.swing.Timer;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
-/**
- *
- * @author jakeharrison
- */
 public class stockTrader extends javax.swing.JFrame {
-    private double money;
-    private int placeholder=0;
-    private int shares;
-    private double price;
-    private Timer timer;
-    private tradingSimulator stock;
-    private String stockChoice;
+    private double money; // Current Money
+    private int placeholder=0; // Placeholder for the timer
+    private int shares; // Amount of shares
+    private double price; // Current price of stock
+    private Timer timer; // Timer for the graph/stock information
+    private tradingSimulator stock; // Stock object
+    private String stockChoice; // Stock choice
+    private int movingAverage; // Moving average
+    private double startMoney; // Starting money
+    private ChartDisplay graph; // Graph object
+    private double boughtPrices; // Price of stock when bought
+    private int amountTimesBought; // Amount of times bought
+    private double unrealprofitLoss; // Unrealized profit/loss
 
     /**
      * Creates new form stockTrader
      */
     public stockTrader() {
         initComponents();
+        jLabel13.setVisible(false);
 
     }
 
@@ -55,6 +59,7 @@ public class stockTrader extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -74,7 +79,8 @@ public class stockTrader extends javax.swing.JFrame {
         setTitle("Trading Floor");
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel1.setBackground(new java.awt.Color(8, 9, 87));
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 51), 2));
         jPanel1.setLocation(new java.awt.Point(-32610, -32735));
 
         jPanel3.setBackground(jPanel1.getBackground());
@@ -89,7 +95,7 @@ public class stockTrader extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Profit/Loss: ");
+        jLabel3.setText("P&L:");
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -126,7 +132,7 @@ public class stockTrader extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,10 +140,11 @@ public class stockTrader extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel12)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(204, 153, 255));
+        jPanel4.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 0), 2));
 
         jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -145,34 +152,32 @@ public class stockTrader extends javax.swing.JFrame {
 
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         jSpinner2.setToolTipText("");
-        jSpinner2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(91, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jSpinner2))
-                    .addComponent(jLabel5))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel5.setBackground(new java.awt.Color(153, 102, 255));
+        jPanel5.setBackground(new java.awt.Color(102, 255, 102));
         jPanel5.setForeground(new java.awt.Color(255, 255, 255));
 
+        jLabel6.setBackground(new java.awt.Color(153, 153, 153));
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -180,6 +185,12 @@ public class stockTrader extends javax.swing.JFrame {
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel6MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel6MouseExited(evt);
             }
         });
 
@@ -194,8 +205,9 @@ public class stockTrader extends javax.swing.JFrame {
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
-        jPanel6.setBackground(new java.awt.Color(153, 0, 255));
+        jPanel6.setBackground(new java.awt.Color(255, 102, 102));
 
+        jLabel7.setBackground(new java.awt.Color(102, 102, 102));
         jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -203,6 +215,12 @@ public class stockTrader extends javax.swing.JFrame {
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel7MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel7MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel7MouseExited(evt);
             }
         });
 
@@ -217,21 +235,33 @@ public class stockTrader extends javax.swing.JFrame {
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
+        jLabel13.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("Error Message");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,12 +274,20 @@ public class stockTrader extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 153));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 51), 2));
+        jPanel2.setForeground(new java.awt.Color(51, 51, 51));
 
-        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        jPanel7.setBackground(new java.awt.Color(51, 51, 51));
+
+        jLabel8.setBackground(new java.awt.Color(255, 255, 204));
+        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 28)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(102, 255, 102));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Stock Configuration");
 
@@ -261,12 +299,18 @@ public class stockTrader extends javax.swing.JFrame {
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        movingAverageSelector.setModel(new javax.swing.SpinnerNumberModel(1, 1, 500, 1));
-        movingAverageSelector.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel8.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 0), 2));
 
+        movingAverageSelector.setModel(new javax.swing.SpinnerNumberModel(1, 1, 500, 1));
+
+        jLabel11.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("Set Moving Average");
         jLabel11.setToolTipText("");
@@ -290,11 +334,15 @@ public class stockTrader extends javax.swing.JFrame {
                 .addGap(14, 14, 14))
         );
 
+        jPanel10.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 0), 2));
+
+        jLabel9.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Starting Money");
 
         startMoneySelector.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-        startMoneySelector.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -315,11 +363,18 @@ public class stockTrader extends javax.swing.JFrame {
                 .addGap(0, 13, Short.MAX_VALUE))
         );
 
+        jPanel9.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 0), 2));
+
+        jLabel10.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Select Stock");
 
+        stockSelector.setBackground(new java.awt.Color(51, 51, 51));
+        stockSelector.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        stockSelector.setForeground(new java.awt.Color(255, 255, 255));
         stockSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Amazon", "Apple", "Google", "Meta", "Microsoft", "NVIDIA", "Starbucks", "Tesla" }));
-        stockSelector.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -341,6 +396,12 @@ public class stockTrader extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
+        jPanel11.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 0), 2));
+
+        jButton1.setBackground(new java.awt.Color(51, 51, 51));
+        jButton1.setFont(new java.awt.Font("Helvetica Neue", 1, 16)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(51, 255, 51));
         jButton1.setText("Start Simulation");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -407,6 +468,7 @@ public class stockTrader extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -414,46 +476,110 @@ public class stockTrader extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
+    private void jLabel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseEntered
+        // When the Buy Panel is entered change the color to a lighter one to indicate that its clickable
+        jPanel5.setBackground(new Color(204,255,204));
+    }//GEN-LAST:event_jLabel6MouseEntered
+
+    private void jLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseEntered
+        // When the Sell Panel is entered change the color to a lighter one to indicate that its clickable
+        jPanel6.setBackground(new Color(255,204,204));
+    }//GEN-LAST:event_jLabel7MouseEntered
+
+    private void jLabel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseExited
+        // When the Buy Panel is exited change the color back to normal
+        jPanel5.setBackground(new Color(102,255,102));
+    }//GEN-LAST:event_jLabel6MouseExited
+
+    private void jLabel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseExited
+        // When the Sell Panel is exited change the color back to normal
+        jPanel6.setBackground(new Color(255,102,102));
+    }//GEN-LAST:event_jLabel7MouseExited
+
+
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws InterruptedException {
-        stockChoice = (String) stockSelector.getSelectedItem();
-        System.out.println("Hello");
-        money = (int) startMoneySelector.getValue();
-        int movingAverage = (int) movingAverageSelector.getValue();
-        stock = new tradingSimulator(stockChoice, movingAverage);
-        jLabel1.setText("Name: " + stockChoice);
-        jLabel12.setText("Money: " + Stock.round(money,2));
-        shares=0;
-        jLabel4.setText("Shares: " + shares);
-        Stock graph = new Stock(stockChoice,"", movingAverage);
-        graph.makeGraph();
-        simulator();
+        stockChoice = (String) stockSelector.getSelectedItem(); // get the stock name
+        startMoney = (int) startMoneySelector.getValue(); // get the starting money
+        money = startMoney; // set the money to the starting money
+        movingAverage = (int) movingAverageSelector.getValue(); // get the moving average
+        stock = new tradingSimulator(stockChoice, movingAverage); // create a new stock object
+        jLabel1.setText("Name: " + stockChoice); // set the name label
+        jLabel12.setText("Money: " + Stock.round(money,2)); // set the money label
+        shares=0; // set the shares to 0
+        jLabel4.setText("Shares: " + shares); // set the shares label
+        graph = new ChartDisplay((stockChoice + " Stock Price"), "Price (USD)", true); // create a new graph
+
+        simulator(); // Starts the simulation
     }
 
 
 
     private void simulator() throws InterruptedException {
+        // Delete any previous timers
         if (timer != null) {
             timer.stop();
             timer = null;
-            placeholder =0;
+            placeholder = 0;
         }
+        // Set up the price and moving average arraylists
+        List priceIndex = new ArrayList<>();
+        List mAIndex = new ArrayList<>();
+        // Get the existing data for the price and moving average
+        List movingAverageData = stock.getMovingAverage();
         price = stock.currentPrice(placeholder);
+        // We run it once initally so we dont have to wait for the 3 second timer
         jLabel2.setText("Price: " + Stock.round(price, 2));
+        priceIndex.add(price);
+        mAIndex.add(movingAverageData.get(placeholder));
+        // If the value is -1 then we dont add a moving average for that point
+        if((double) movingAverageData.get(placeholder) == -1){
+            graph.updateData(priceIndex,mAIndex, false);
+        }
+        else{
+            graph.updateData(priceIndex,mAIndex, true);
+        }
         placeholder++;
-        timer = new Timer(5000, new ActionListener() {
+        // initiate the timer and set it to run every 3 seconds
+        timer = new Timer(3000, new ActionListener() {
             @Override
+            // Everything in this method is run every 3 seconds
             public void actionPerformed(ActionEvent e) {
                 price = Stock.round(stock.currentPrice(placeholder),2);
                 jLabel2.setText("Price: " + price);
+                unrealprofitLoss = Stock.round(shares*(price-(boughtPrices/amountTimesBought)),2); // calculate the unrealized profit/loss
+                jLabel3.setText("P&L: " + unrealprofitLoss);
+                // If the profit/loss is positive set the color to green, if its negative set it to red, if its 0 set it to white
+                if(unrealprofitLoss >0){
+                    jLabel3.setForeground(Color.green);
+                } else if (unrealprofitLoss<0) {
+                    jLabel3.setForeground(Color.red);
+                }
+                else{
+                    jLabel3.setForeground(Color.white);
+                }
+                priceIndex.add(price);
+                mAIndex.add(movingAverageData.get(placeholder));
+                // If the value is -1 then we dont add a moving average for that point
+                if((double) movingAverageData.get(placeholder) == -1){
+                    graph.updateData(priceIndex,mAIndex, false);
+                }
+                else{
+                    graph.updateData(priceIndex,mAIndex, true);
+                }
+
                 placeholder++;
             }
         });
@@ -465,15 +591,24 @@ public class stockTrader extends javax.swing.JFrame {
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {                                     
         // buy button
-        int amount = (int) jSpinner2.getValue();
-        if(stock.buy(price, amount, money) == -1){
-            System.out.println("Not enough");
+
+        int amount = (int) jSpinner2.getValue(); // get the amount of shares to buy
+
+        if(stock.buy(price, amount, money) == -1){ // if the buy method returns -1 then they dont have enough money
+            // display an error message
+            jLabel13.setVisible(true);
+            jLabel13.setText("Insufficient Funds");
         }
         else{
+            // if they have enough money then buy the shares
             money = stock.buy(price, amount, money);
             shares +=amount;
+            boughtPrices += price;
+            amountTimesBought++;
             jLabel12.setText("Money: " + Stock.round(money,2));
             jLabel4.setText("Shares: "+ shares);
+            // hide the error message
+            jLabel13.setVisible(false);
         }
 
 
@@ -482,15 +617,23 @@ public class stockTrader extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {                                     
         //sell button
-        int amount = (int) jSpinner2.getValue();
-        if(amount > shares){
-            System.out.println("Not enough");
+
+        int amount = (int) jSpinner2.getValue(); // get the amount of shares to sell
+        if(amount > shares){ // if they dont have enough shares then display an error message
+            jLabel13.setVisible(true);
+            jLabel13.setText("Not Enough Shares");
         }
         else{
+            // if they have enough shares then sell them
             money = stock.sell(price, amount, money);
             shares -=amount;
             jLabel12.setText("Money: " + Stock.round(money,2));
             jLabel4.setText("Shares: "+ Stock.round(shares,2));
+            // hide the error message
+            jLabel13.setVisible(false);
+
+
+
         }
 
 
@@ -538,6 +681,7 @@ public class stockTrader extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

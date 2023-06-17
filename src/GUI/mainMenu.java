@@ -28,10 +28,10 @@ public class mainMenu extends javax.swing.JFrame {
     public mainMenu() {
         initComponents();
         jPanel2.setLayout(new BorderLayout());
-        JFreeChart chart = createChart();
-        java.awt.image.BufferedImage image = chart.createBufferedImage(430, 378);
-        JLabel label = new JLabel(new ImageIcon(image));
-        jPanel2.add(label, BorderLayout.CENTER);
+        JFreeChart chart = createChart(); // Creates a chart to eventually be displayed as an image
+        java.awt.image.BufferedImage image = chart.createBufferedImage(430, 378); // Creates the image from the chart
+        JLabel label = new JLabel(new ImageIcon(image)); // Creates a label to display the image
+        jPanel2.add(label, BorderLayout.CENTER); // Adds the label to the panel
     }
 
     /**
@@ -40,7 +40,6 @@ public class mainMenu extends javax.swing.JFrame {
      * @return the created JFreeChart
      */
     private JFreeChart createChart() {
-        // Create a sample dataset
         Stock stock = new Stock("Apple", "null", 20);
         ArrayList<Double> values = new ArrayList<Double>();
         values = stock.getPrice();
@@ -294,51 +293,60 @@ private DefaultCategoryDataset createDataset(ArrayList<Double> values) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // Launches the stock trader GUI
         stockTrader open = new stockTrader();
         open.setVisible(true);
 
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // Launches the moving average simulator GUI
         MovingAverage open = new MovingAverage();
         open.setVisible(true);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jPanel5MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MousePressed
+        // Created by Accident, unable to delete
     }//GEN-LAST:event_jPanel5MousePressed
 
     private void jLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseEntered
-        // TODO add your handling code here:
+        // Changes the background color of the panel when the mouse enters the label to indicate that it is clickable
         jPanel5.setBackground(new Color(137, 140, 221));
     }//GEN-LAST:event_jLabel2MouseEntered
 
     private void jLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseExited
+        // Changes the background color of the panel when the mouse exits the label to indicate that it is no longer clickable
         jPanel5.setBackground(new Color(102,51,255, 255));
     }//GEN-LAST:event_jLabel2MouseExited
 
     private void jPanel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseEntered
-        // TODO add your handling code here:
+        // Created by Accident, unable to delete
     }//GEN-LAST:event_jPanel3MouseEntered
 
     private void jLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseEntered
+        // Changes the background color of the panel when the mouse enters the label to indicate that it is clickable
         jPanel3.setBackground(new Color(137, 140, 221));
 
     }//GEN-LAST:event_jLabel3MouseEntered
 
     private void jLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseExited
+         // Changes the background color of the panel when the mouse exits the label to indicate that it is no longer clickable
         jPanel3.setBackground(new Color(102,102,255));
     }//GEN-LAST:event_jLabel3MouseExited
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        // Launches the about project GUI
         AboutProject open = new AboutProject();
         open.setVisible(true);
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseEntered
+        // Changes the background color of the panel when the mouse enters the label to indicate that it is clickable
         jPanel6.setBackground(new Color(137, 140, 221));
     }//GEN-LAST:event_jLabel4MouseEntered
 
     private void jLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseExited
+        // Changes the background color of the panel when the mouse exits the label to indicate that it is no longer clickable
         jPanel6.setBackground(new Color(102,0,255));
     }//GEN-LAST:event_jLabel4MouseExited
 

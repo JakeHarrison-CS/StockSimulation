@@ -12,10 +12,7 @@ import static GUI.MovingAverage.getMoney;
 import com.StockSimulation.Simulator.Stock;
 import com.StockSimulation.Analysis.movingAveragePrediction;
 
-/**
- *
- * @author jakeharrison
- */
+
 public class MovingAverageDisplay extends javax.swing.JFrame {
 
     /**
@@ -24,33 +21,41 @@ public class MovingAverageDisplay extends javax.swing.JFrame {
     DefaultTableModel model;
     public MovingAverageDisplay() {
         initComponents();
+        // Create a new stock object with the stock choice and the moving average term
         Stock stock = new Stock(getChoice(), "null", 20);
-        movingAveragePrediction prediction = new movingAveragePrediction(stock, 2000);
+        // Create a new movingAveragePrediction object with the stock object and the starting money
+        movingAveragePrediction prediction = new movingAveragePrediction(stock, getMoney());
         model = (DefaultTableModel) jTable1.getModel();
+        // Setting up the information for the table all the values here are just placeholders
         int highestMATerm = -1;
         int lowestMATerm = -1;
         double highestMA = -1000;
-        double lowestMA = 1000;
+        double lowestMA = 1000; 
         prediction.startMoney = getMoney();
+        // Loop through all the moving average terms and add the data to the table
         for(int i=1; i<=500;i++)
         {
+            // Start the moving average calculation and set the money to the starting money
             double result = prediction.movingAverageRun();
             prediction.money = prediction.startMoney;
+            // If the result is higher than the highest moving average set the highest moving average to the result and set the highest moving average term to the current term
             if(result > highestMA)
             {
                 highestMA = result;
                 highestMATerm = i;
             }
+            // If the result is lower than the lowest moving average set the lowest moving average to the result and set the lowest moving average term to the current term
             if(result < lowestMA)
             {
                 lowestMA = result;
                 lowestMATerm = i;
 
             }
-
+            // Add the data to the table
             model.addRow(new Object[]{i, "$"+Stock.round(result+prediction.startMoney,2), "$"+Stock.round(result, 2)});
             stock.setMovingAverageTerm(i);
         }
+        // Set the labels to the highest and lowest moving average terms and the highest and lowest moving averages
         jLabel1.setText("Highest Profit: $" + Stock.round(highestMA, 2));
         jLabel2.setText("Lowest Profit: $" + Stock.round(lowestMA,2));
         jLabel4.setText("Highest Term: " + Stock.round(highestMATerm,2));

@@ -3,12 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
-import com.StockSimulation.Analysis.movingAveragePrediction;
-import com.StockSimulation.Simulator.Stock;
-/**
- *
- * @author jakeharrison
- */
+
 public class MovingAverage extends javax.swing.JFrame {
 
     /**
@@ -16,7 +11,7 @@ public class MovingAverage extends javax.swing.JFrame {
      */
     public MovingAverage() {
         initComponents();
-        moneyError.setVisible(false);
+        moneyError.setVisible(false); // Hide the error message
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,8 +106,9 @@ public class MovingAverage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        boolean runOnly = false;
+        // When the button is pressed, run the moving average calculation
+        boolean runOnly = false; // If the program should run or not
+        // if the money is not a number, throw an error
         try {
             double money = getMoney();
             runOnly = true;
@@ -120,16 +116,28 @@ public class MovingAverage extends javax.swing.JFrame {
             moneyError.setVisible(true);
             runOnly = false;
         }
+        // If the money is a number, run the program
         if(runOnly){
+            // Set the results to visible
             MovingAverageDisplay results = new MovingAverageDisplay();
             results.setVisible(true);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * Gets the stock choice
+     * @return (String) the stock choice
+     *
+     */
     public static String getChoice(){
         String stockChoice = (String)choice.getSelectedItem();
         return stockChoice;
     }
+    /**
+     * Gets the money amount
+     * @return (double) the money amount
+     *
+     */
     public static double getMoney(){
         try {
             String money = startMoney.getText();
@@ -140,7 +148,6 @@ public class MovingAverage extends javax.swing.JFrame {
     }
     private void choiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choiceActionPerformed
         // TODO add your handling code here:
-        System.out.println(choice);
     }//GEN-LAST:event_choiceActionPerformed
 
     private void startMoneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startMoneyActionPerformed
